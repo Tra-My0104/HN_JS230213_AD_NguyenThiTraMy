@@ -107,21 +107,6 @@
         }
         renderlistPlayer()
         renderCount();
-        let timeElapsed = 0;
-        let timeId;
-        function start() {
-            timeElapsed = 0;
-            document.getElementById("time").innerText = timeElapsed + " giây";
-            timeId = setInterval(function () {
-                timeElapsed++;
-                document.getElementById("time").innerText = timeElapsed + " giây";
-            }, 1000);
-        }
-        function reset() {
-            clearInterval(timeId);
-            timeElapsed = 0;
-            document.getElementById("time").innerText = timeElapsed + " giây";
-        }
     </script>
 </body>
 

@@ -37,11 +37,15 @@
 
     <div id="feedback-container" class="feedback-container">
         <div class="pointComment">10</div>
-        <div class="comment">
-           hay lắm
+        <div class="comment" id="comment">
+            hay lắm
         </div>
-        <div onclick="Edit()" id="edit"><i class="fa-sharp fa-solid fa-pen-to-square"></i></div>
-        <div onclick="Delete()" id="delete"><i class="fa-solid fa-xmark"></i></div>
+        <div id="edit">
+            <button onclick="Edit()">Sửa</button>
+        </div>
+        <div id="delete">
+            <button onclick="Delete()">xóa</button>
+        </div>
     </div>
 
     <script>
@@ -68,36 +72,39 @@
             renderFeedBack()
         }
         renderFeedBack()
-        function clickNumber() {
-            count = 1;
-        }
+
         function renderFeedBack() {
             let result = ``;
-            for (i = 0; i < listFeedBack; i++) {
+            for (i = 0; i < listFeedBack.length; i++) {
                 result +=
-                 `  <div class="pointComment">${count}</div>
+                    `  <div class="pointComment">${count}</div>
                       <div class="comment">
                          ${listFeedBack[i].comment}
                       </div>
-                     <div onclick="Edit()" id="edit${i}"><i class="fa-sharp fa-solid fa-pen-to-square"></i></div>
-                     <div onclick="Delete()" id="delete${i}"><i class="fa-solid fa-xmark"></i></div>
+                      <div id="edit">
+                        <button onclick="Edit(${i})">Sửa</button> 
+                      </div>
+                     <div  id="delete">
+                         <button onclick="Delete(${i}) ">xóa</button> 
+                     </div>
                `
             }
-            document.getElementById("feedback-container").innerHTML=result;
+            document.getElementById("feedback-container").innerHTML = result;
+            // console.log(result);
         }
-        function edit(id){
-            document.getElementById("inputSend").value=listFeedBack[id].comment;
+        function edit(id) {
+            document.getElementById("inputSend").value = listFeedBack[id].comment;
             localStorage.setItem("flag", id);
             renderFeedBack();
         }
-        function Delete(id){
-            if(confirm("Are you sure want to delete?"==true)){
-            listFeedBack.splice(id,1)
-            localStorage.setItem("listFeedBack",JSON.stringify(listFeedBack))
-            renderFeedBack()
-          }
+        function Delete(id) {
+            if (confirm("Are you sure want to delete?" == true)) {
+                listFeedBack.splice(id, 1)
+                localStorage.setItem("listFeedBack", JSON.stringify(listFeedBack))
+                renderFeedBack()
+            }
         }
-        </script>
+    </script>
 </body>
 
 </html>
