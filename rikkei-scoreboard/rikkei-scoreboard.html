@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header" id="headerInput">
+            <div class="playAndPoint">
+                <div>Player:</div>
+                <div>Total Points:</div>
+            </div>
+        </header>
+        <div class="logo-rikkei">
+            <h2>Rikkei Scoreboard</h2>
+        </div>
+        <div class="stop">
+            <div>stopwatch</div>
+            <div>
+                <p>Thời gian: <span id="time">0</span></p>
+            </div>
+            <button onclick="start()">START</button>
+            <button onclick="reset()">RESET</button>
+        </div>
+        <div class="Added">
+            <table id="nameTable"></table>
+        </div>
+        <div class="addPlayer">
+            <input type="text"  id="nameInput" />
+            <button onclick="addButton()">ADD PLAYER</button>
+        </div>
+    </div>
+    <script>
+
+        let listPlayer = JSON.parse(localStorage.getItem("listPlayer"));
+        function addButton() {
+            let namePlayer = document.getElementById("nameInput").value;
+            let sc = 0;
+            let player = {
+                nameInput: namePlayer,
+                score: sc,
+            };
+            if (listPlayer == null) {
+                listPlayer = [];
+                listPlayer.push(player);
+                localStorage.setItem("listPlayer", JSON.stringify(listPlayer));
+            } else {
+                listPlayer.push(player);
+                localStorage.setItem("listPlayer", JSON.stringify(listPlayer));
+            }
+            renderlistPlayer();
+            renderCount();
+        }
+        function renderlistPlayer() {
+            let result = "";
+            for (i = 0; i < listPlayer.length; i++) {
+                result += `
+                <tr>
+                    <td><button onclick="del(${i})">xóa</button></td>
+                    <td>${listPlayer[i].name}</td>
+                    <td><button onclick="downSC(${i})">-</button></td>
+                    <td>${listPlayer[i].score}</td>
+                    <td><button onclick="upSC(${i})">+</button></td>
+                </tr>
+                `;
+            }
+            document.getElementById("nameTable").innerHTML = result;
+        }
+        function del(index) {
+            listPlayer.splice(index, 1);
+            localStorage.setItem("listPlayer", JSON.stringify(listPlayer));
+            renderlistPlayer()
+            renderCount();
+        }
+        function upSC(index) {
+            listPlayer[index].score++;
+            localStorage.setItem("listPlayer", JSON.stringify(listPlayer));
+            renderlistPlayer()
+            renderCount();
+        }
+
+        function downSC(index) {
+            listPlayer[index].score--;
+            localStorage.setItem("listPlayer", JSON.stringify(listPlayer));
+            renderlistPlayer()
+            renderCount();
+        }
+        function renderCount() {
+            let a = 0;
+            for (i = 0; i < listPlayer.length; i++) {
+                a += listPlayer[i].score;
+                sum = a;
+            }
+            let result = `
+              <div class ="playAndPoint">
+                  <div>Player:${listPlayer.length}</div>
+                  <div>Total Points:${sum}</div>
+             </div>      
+              `;
+           
+            document.getElementById("headerInput").innerHTML = result;
+        }
+        renderlistPlayer()
+        renderCount();
+        let timeElapsed = 0;
+        let timeId;
+        function start() {
+            timeElapsed = 0;
+            document.getElementById("time").innerText = timeElapsed + " giây";
+            timeId = setInterval(function () {
+                timeElapsed++;
+                document.getElementById("time").innerText = timeElapsed + " giây";
+            }, 1000);
+        }
+        function reset() {
+            clearInterval(timeId);
+            timeElapsed = 0;
+            document.getElementById("time").innerText = timeElapsed + " giây";
+        }
+    </script>
+</body>
+
+</html>

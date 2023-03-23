@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./feedback-TA.css">
+    <script src="https://kit.fontawesome.com/33f1ec5491.js"></script>
+</head>
+
+<body>
+    <h1>FEEDBACK-TA</h1>
+    <div class="containerBig">
+        <div class="container">
+            <h2>Thầy phú dạy anh em có hay không ????</h2>
+            <div id="number" class="number">
+                <button class="numberBtn" onclick="clickNumber()">1</button>
+                <button class="numberBtn" onclick="clickNumber()">2</button>
+                <button class="numberBtn" onclick="clickNumber()">3</button>
+                <button class="numberBtn" onclick="clickNumber()">4</button>
+                <button class="numberBtn" onclick="clickNumber()">5</button>
+                <button class="numberBtn" onclick="clickNumber()">6</button>
+                <button class="numberBtn" onclick="clickNumber()">7</button>
+                <button class="numberBtn" onclick="clickNumber()">8</button>
+                <button class="numberBtn" onclick="clickNumber()">9</button>
+                <button class="numberBtn" onclick="clickNumber()">10</button>
+            </div>
+            <div class="input">
+                <input type="text" placeholder="write a review" class="inputSend" id="inputSend">
+                <button onclick="sendBtn()">Send</button>
+            </div>
+            <p>Text must be at least 10 characters </p>
+        </div>
+    </div>
+
+    <div id="feedback-container" class="feedback-container">
+        <div class="pointComment">10</div>
+        <div class="comment">
+           hay lắm
+        </div>
+        <div onclick="Edit()" id="edit"><i class="fa-sharp fa-solid fa-pen-to-square"></i></div>
+        <div onclick="Delete()" id="delete"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+
+    <script>
+        let listFeedBack = JSON.parse(localStorage.getItem("listFeedBack"))
+        let count = 1
+        function sendBtn() {
+            let valueInput = document.getElementById("inputSend").value;
+            let feedBack = {
+                comment: valueInput,
+            }
+            let flag = JSON.parse(localStorage.getItem("flag"))
+            if (flag != null) {
+                listFeedBack.splice(flag, 1, feedBack)
+                localStorage.removeItem("flag")
+                localStorage.setItem("listFeedBack", JSON.stringify(listFeedBack))
+                renderFeedBack()
+                return;
+            }
+            if (listFeedBack == null) {
+                listFeedBack = []
+            }
+            listFeedBack.push(feedBack)
+            localStorage.setItem("listFeedBack", JSON.stringify(listFeedBack))
+            renderFeedBack()
+        }
+        renderFeedBack()
+        function clickNumber() {
+            count = 1;
+        }
+        function renderFeedBack() {
+            let result = ``;
+            for (i = 0; i < listFeedBack; i++) {
+                result +=
+                 `  <div class="pointComment">${count}</div>
+                      <div class="comment">
+                         ${listFeedBack[i].comment}
+                      </div>
+                     <div onclick="Edit()" id="edit${i}"><i class="fa-sharp fa-solid fa-pen-to-square"></i></div>
+                     <div onclick="Delete()" id="delete${i}"><i class="fa-solid fa-xmark"></i></div>
+               `
+            }
+            document.getElementById("feedback-container").innerHTML=result;
+        }
+        function edit(id){
+            document.getElementById("inputSend").value=listFeedBack[id].comment;
+            localStorage.setItem("flag", id);
+            renderFeedBack();
+        }
+        function Delete(id){
+            if(confirm("Are you sure want to delete?"==true)){
+            listFeedBack.splice(id,1)
+            localStorage.setItem("listFeedBack",JSON.stringify(listFeedBack))
+            renderFeedBack()
+          }
+        }
+        </script>
+</body>
+
+</html>
